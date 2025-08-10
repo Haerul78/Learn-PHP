@@ -30,7 +30,9 @@ $alamat['meilan'] = "Malang";
 $alamat['marimar'] = "Mexico";
 ```
 bisa diakses dengan cara biasa atau loop.
-```echo "Alamat Marimar adalah di ". $alamat['marimar'];```
+```
+echo "Alamat Marimar adalah di ". $alamat['marimar'];
+```
 ```
 foreach($alamat as $x => $value) {
     echo "Alamat ". $x. " di ". $value;
