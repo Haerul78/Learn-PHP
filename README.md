@@ -39,3 +39,24 @@ foreach($alamat as $x => $value) {
     echo "<br>";
 }
 ```
+### Array Multidimensi
+Array multidimensi adalah sebuah array yang memikili satu array atau lebih. Berikut Contohnya:
+```
+$karnivora = ['Singa', 'Harimau', 'Beruang'];
+$herbivora = ['Kambing', 'Sapi', 'Jerapah'];
+$omnivora = ['Ayam', 'Monyet', 'Manusia'];
+$binatang = [
+    'karnivora' => $karnivora,
+    'herbivora' => $herbivora,
+    'omnivora' => $omnivora
+];
+
+foreach ($binatang as $jenis => $hewan) {
+    echo "Hewan-hewan jenis $jenis yaitu:";
+    echo "<ul>";
+    foreach ($hewan as $h => $data) {
+        echo "<li>$data</li>";
+    }
+    echo "</ul>";
+}
+```
