@@ -64,3 +64,44 @@ foreach ($binatang as $jenis => $hewan) {
     echo "</ul>";
 }
 ```
+## Tipe data Null
+Null adalah tipe data khusus yang hanya memiliki satu nilai: NULL. Sebuah variabel dikatakan memiliki nilai NULL jika:
+1. Belum diberi nilai apa pun.
+2. Secara eksplisit diberi nilai NULL.
+3. Telah dihapus menggunakan fungsi unset().
+Penting untuk dipahami bahwa variabel yang belum dideklarasikan (undefined) berbeda dengan variabel yang bernilai NULL. Mengakses variabel yang undefined akan memicu error Undefined variable.
+```
+<?php
+// $nama belum dideklarasikan.
+// echo $nama; // Ini akan menghasilkan error "Undefined variable".
+
+// Variabel ini secara eksplisit diberi nilai NULL.
+$nama = NULL;
+echo $nama; // Ini tidak akan menampilkan apa pun, dan tidak ada error.
+
+unset($nama);
+// echo $nama; // Variabel $nama sudah dihapus, jadi ini juga akan menghasilkan error "Undefined variable".
+?>
+```
+### Operator ?? (Null Coalescing Operator)
+Operator ?? (sejak PHP 7) adalah cara singkat untuk menangani kasus di mana sebuah variabel mungkin tidak ada (undefined) atau bernilai NULL. Operator ini akan mengembalikan nilai di sisi kiri jika tidak NULL, dan akan mengembalikan nilai di sisi kanan jika nilai di sisi kiri NULL.
+Contoh yang lebih tepat:
+```
+<?php
+$nama_depan = "Budi";
+$nama_belakang = null;
+
+// Cek apakah $nama_depan bernilai null. Jika tidak, cetak nilainya.
+echo $nama_depan ?? "Anonim";
+// Output: Budi
+
+// Cek apakah $nama_belakang bernilai null. Karena ya, cetak nilai default-nya "Anonim".
+echo $nama_belakang ?? "Anonim";
+// Output: Anonim
+
+// Cek apakah variabel $nama_tengah ada. Jika tidak, cetak nilai default-nya.
+// Ini akan mencegah error "Undefined variable".
+echo $nama_tengah ?? "Tidak Ada";
+// Output: Tidak Ada
+?>
+```
