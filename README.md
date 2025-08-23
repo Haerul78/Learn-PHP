@@ -389,6 +389,7 @@ Gunakan JSON jika:
 - Keamanan dan portabilitas menjadi prioritas
 
 #### Contoh Praktis: Menyimpan Data Pengguna
+```
 <?php
 // Simulasi data pengguna dari form
 $data_pengguna = [
@@ -413,3 +414,4 @@ echo "Selamat datang, " . $loaded_data['nama'] . "!\n";
 echo "Email: " . $loaded_data['email'] . "\n";
 echo "Tema yang dipilih: " . $loaded_data['preferences']['tema'];
 ?>
+```
