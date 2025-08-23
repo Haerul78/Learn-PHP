@@ -210,3 +210,206 @@ Gunakan $_POST saat:
 - Anda ingin mengirimkan data sensitif seperti kata sandi atau nomor kartu kredit.
 - Anda mengirimkan data dalam jumlah besar, seperti isi dari sebuah artikel.
 - Anda tidak ingin data form terlihat di URL.
+
+## Write & Read File
+PHP menyediakan fungsi-fungsi untuk menulis dan membaca file secara mudah. Dua fungsi utama yang sering digunakan adalah ``` file_put_contents()``` untuk menulis data ke file dan ``` file_get_contents()``` untuk membaca data dari file.
+
+### Menulis File dengan file_put_contents()
+Fungsi file_put_contents() digunakan untuk menulis data ke dalam sebuah file. Jika file belum ada, PHP akan membuatnya secara otomatis. Jika file sudah ada, isi file akan ditimpa (overwrite).
+
+#### Sintaks:
+```
+file_put_contents(nama_file, data, flags);
+```
+#### Contoh penggunaan:
+```
+<?php
+$message = "Selamat datang di PHP!";
+file_put_contents("content.txt", $message);
+echo "Data telah berhasil ditulis ke file content.txt";
+?>
+```
+
+### Membaca File dengan file_get_contents()
+Fungsi ```file_get_contents()``` digunakan untuk membaca seluruh isi file dan mengembalikannya sebagai string.
+
+#### Sintaks:
+```
+$data = file_get_contents(nama_file);
+```
+#### Contoh penggunaan:
+```
+<?php
+// Membaca file yang sudah dibuat sebelumnya
+$isi_file = file_get_contents("content.txt");
+echo $isi_file; // Output: Selamat datang di PHP!
+
+// Membaca file dari folder tertentu
+echo file_get_contents("file/Hallo.txt");
+?>
+```
+
+#### Contoh Kombinasi Write & Read
+```
+<?php
+// Menulis data ke file
+$data_baru = "Ini adalah data baru yang akan disimpan.";
+file_put_contents("data_saya.txt", $data_baru);
+
+// Membaca data dari file
+$data_terbaca = file_get_contents("data_saya.txt");
+echo "Isi file: " . $data_terbaca;
+?>
+```
+
+### Tips Penting:
+- Pastikan folder tempat file akan disimpan memiliki permission yang tepat (writeable).
+- Gunakan path yang benar saat mengakses file.
+- Selalu cek apakah file berhasil dibuat atau tidak untuk menghindari error.
+
+## Write Format Serialize & JSON
+Ketika bekerja dengan data kompleks seperti array atau object, kita perlu mengonversinya menjadi format tertentu sebelum menyimpannya ke file. PHP menyediakan dua cara utama: Serialize dan JSON.
+
+### Format Serialize
+Serialize adalah proses mengubah data kompleks (seperti array atau object) menjadi string yang dapat disimpan atau dikirim. Unserialize adalah kebalikannya, yaitu mengubah string tersebut kembali menjadi data aslinya.
+
+#### Kelebihan Serialize:
+- Dapat menyimpan semua tipe data PHP termasuk object dengan method-nya
+- Format asli PHP, sangat tepat untuk komunikasi antar aplikasi PHP
+#### Kekurangan Serialize:
+- Hanya dapat dibaca oleh PHP
+- Rentan terhadap serangan injeksi jika digunakan dengan data yang tidak dipercaya
+
+#### Contoh penggunaan:
+```
+<?php
+// Data array yang akan disimpan
+$karyawan = [
+    "nama" => "Ahmad",
+    "jabatan" => "Developer",
+    "gaji" => 8000000,
+    "alamat" => [
+        "jalan" => "Jl. Sudirman No. 123",
+        "kota" => "Jakarta"
+    ]
+];
+
+// Serialize: mengubah array menjadi string
+$data = serialize($karyawan);
+echo "Data setelah di-serialize:\n";
+echo $data . "\n\n";
+
+// Menyimpan data serialize ke file
+file_put_contents('data_serialize.txt', $data);
+
+// Membaca data dari file
+$output = file_get_contents('data_serialize.txt');
+
+// Unserialize: mengubah string kembali menjadi array
+$hasil = unserialize($output);
+echo "Data setelah di-unserialize:\n";
+print_r($hasil);
+?>
+```
+
+### Format JSON
+JSON (JavaScript Object Notation) adalah format pertukaran data yang ringan dan mudah dibaca. Meskipun berasal dari JavaScript, JSON kini menjadi standar universal untuk pertukaran data antar aplikasi.
+
+#### Kelebihan JSON:
+- Format universal yang dapat dibaca oleh hampir semua bahasa pemrograman
+- Mudah dibaca oleh manusia
+- Lebih aman daripada serialize
+- Ukuran file yang dihasilkan biasanya lebih kecil
+#### Kekurangan JSON:
+- Tidak dapat menyimpan object PHP dengan method-nya
+- Terbatas pada tipe data tertentu (string, number, boolean, array, object, null)
+
+#### Contoh penggunaan:
+```
+<?php
+// Data array yang sama seperti contoh sebelumnya
+$karyawan = [
+    "nama" => "Ahmad",
+    "jabatan" => "Developer", 
+    "gaji" => 8000000,
+    "alamat" => [
+        "jalan" => "Jl. Sudirman No. 123",
+        "kota" => "Jakarta"
+    ]
+];
+
+// json_encode: mengubah array menjadi string JSON
+$data = json_encode($karyawan);
+echo "Data dalam format JSON:\n";
+echo $data . "\n\n";
+
+// Menyimpan data JSON ke file
+file_put_contents('data_json.txt', $data);
+
+// Membaca data dari file
+$output = file_get_contents('data_json.txt');
+
+// json_decode: mengubah string JSON kembali menjadi array
+// Parameter kedua (true) mengubah object menjadi associative array
+$hasil = json_decode($output, true);
+echo "Data setelah di-decode dari JSON:\n";
+print_r($hasil);
+?>
+```
+
+#### Perbandingan Output JSON dengan Pretty Print
+Untuk membuat JSON lebih mudah dibaca, Anda bisa menggunakan flag JSON_PRETTY_PRINT:
+```
+<?php
+$karyawan = [
+    "nama" => "Ahmad",
+    "jabatan" => "Developer",
+    "gaji" => 8000000,
+    "skills" => ["PHP", "JavaScript", "MySQL"]
+];
+
+// JSON tanpa formatting
+$json_compact = json_encode($karyawan);
+echo "JSON Compact:\n" . $json_compact . "\n\n";
+
+// JSON dengan pretty print
+$json_pretty = json_encode($karyawan, JSON_PRETTY_PRINT);
+echo "JSON Pretty Print:\n" . $json_pretty . "\n\n";
+?>
+```
+
+#### Kapan Menggunakan Serialize vs JSON?
+Gunakan Serialize jika:
+- Data hanya akan digunakan dalam aplikasi PHP
+- Anda perlu menyimpan object PHP dengan method-nya
+- Performa encoding/decoding menjadi prioritas utama
+Gunakan JSON jika:
+- Data akan dibagikan dengan aplikasi lain (API, JavaScript, dll)
+- Anda ingin format yang mudah dibaca manusia
+- Keamanan dan portabilitas menjadi prioritas
+
+#### Contoh Praktis: Menyimpan Data Pengguna
+<?php
+// Simulasi data pengguna dari form
+$data_pengguna = [
+    "id" => 1,
+    "nama" => "Budi Santoso",
+    "email" => "budi@email.com",
+    "tanggal_daftar" => date('Y-m-d H:i:s'),
+    "preferences" => [
+        "tema" => "dark",
+        "bahasa" => "id",
+        "notifikasi" => true
+    ]
+];
+
+// Menyimpan dalam format JSON (lebih direkomendasikan)
+$json_data = json_encode($data_pengguna, JSON_PRETTY_PRINT);
+file_put_contents('user_data.json', $json_data);
+
+// Membaca dan menampilkan data
+$loaded_data = json_decode(file_get_contents('user_data.json'), true);
+echo "Selamat datang, " . $loaded_data['nama'] . "!\n";
+echo "Email: " . $loaded_data['email'] . "\n";
+echo "Tema yang dipilih: " . $loaded_data['preferences']['tema'];
+?>
